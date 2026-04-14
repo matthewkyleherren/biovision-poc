@@ -1,95 +1,59 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronDown } from "lucide-react";
 
 export function HeroHome() {
-  const [showChevron, setShowChevron] = useState(true);
-
-  useEffect(() => {
-    const onScroll = () => setShowChevron(window.scrollY < 100);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const lines = ["Healthy soil.", "Sustainable food.", "For everyone."];
-
   return (
-    <section className="h-screen relative bg-cream overflow-hidden">
-      {/* Full-bleed hero image — desktop (landscape), anchored to bottom */}
-      <Image
-        src="/images/hero/hero_desktop.webp"
-        alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
-        fill
-        className="object-cover object-bottom hidden md:block"
-        priority
-      />
-      {/* Full-bleed hero image — mobile (portrait crop), anchored to bottom */}
-      <Image
-        src="/images/hero/hero_mobile.webp"
-        alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
-        fill
-        className="object-cover object-bottom md:hidden"
-        priority
-      />
-      {/* Bottom gradient for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-      {/* Text pinned to the bottom */}
-      <div className="absolute inset-x-0 bottom-0 z-10 px-6 pb-16 md:pb-20">
-        <div className="max-w-7xl mx-auto">
-          <span className="inline-block text-body-sm text-white/50 mb-6 animate-[fadeUp_0.8s_ease-out_both]">
-            Foundation for Ecological Development
-          </span>
-
-          <div className="space-y-1">
-            {lines.map((line, i) => (
-              <h1
-                key={i}
-                className="text-hero text-white animate-[fadeUp_0.8s_ease-out_both]"
-                style={{ animationDelay: `${i * 0.15}s` }}
-              >
-                {line}
-              </h1>
-            ))}
-          </div>
-
-          <p
-            className="text-body-lg text-white/70 max-w-xl mt-6 animate-[fadeUp_0.8s_ease-out_both]"
-            style={{ animationDelay: "0.5s" }}
-          >
-            BioVision strengthens ecological food systems in Sub-Saharan Africa
-            and Switzerland — through science, partnerships, and 25 years of
-            proven impact on the ground.
-          </p>
-
-          <div
-            className="flex flex-col sm:flex-row items-start gap-4 mt-8 animate-[fadeUp_0.8s_ease-out_both]"
-            style={{ animationDelay: "0.65s" }}
-          >
-            <Link
-              href="/impact"
-              className="bg-white text-ink px-8 py-3.5 rounded-full hover:bg-white/90 transition-colors"
-            >
-              See our impact
-            </Link>
-            <Link
-              href="/give"
-              className="border border-white/40 text-white px-8 py-3.5 rounded-full hover:bg-white/10 transition-colors"
-            >
-              Support our work
-            </Link>
-          </div>
-        </div>
+    <section className="relative h-screen bg-cream overflow-hidden">
+      {/* ── Headline — centered, behind the image, just above the lady's headdress ── */}
+      <div className="absolute inset-x-0 top-0 z-0 flex items-end justify-center px-6 pt-34 md:pt-48 pb-4">
+        <h1
+          className="text-[clamp(64px,12vw,180px)] font-light leading-[0.96] tracking-[-0.04em] text-ink text-center animate-[fadeUp_0.8s_ease-out_both]"
+        >
+          A future for all,
+          <br />
+          naturally.
+        </h1>
       </div>
 
-      <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 transition-opacity duration-500 z-10"
-        style={{ opacity: showChevron ? 1 : 0 }}
-      >
-        <ChevronDown className="w-6 h-6 text-white/50 animate-scroll-bounce" />
+      {/* ── Image — anchored to bottom, covers full width, overlaps headline ── */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
+        {/* Desktop */}
+        <Image
+          src="/images/hero/hero_desktop.webp"
+          alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
+          width={1920}
+          height={960}
+          className="w-full h-auto hidden md:block"
+          priority
+        />
+        {/* Mobile */}
+        <Image
+          src="/images/hero/hero_mobile.webp"
+          alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
+          width={960}
+          height={1200}
+          className="w-full h-auto md:hidden"
+          priority
+        />
+      </div>
+
+      {/* ── Description — in the sky/white space above the bending man ── */}
+      <div className="absolute top-[38%] md:top-[26%] right-[4%] md:right-[4%] z-20 max-w-[180px] md:max-w-[240px] animate-[fadeUp_0.8s_ease-out_0.3s_both]">
+        <p className="text-[clamp(12px,1.2vw,16px)] leading-[1.5] tracking-[-0.01em] text-ink/70">
+          Strengthening food systems in Sub-Saharan Africa and Switzerland
+          — through science, partnerships, and 25 years on the ground.
+        </p>
+        <Link
+          href="/impact"
+          className="inline-flex items-center gap-2 mt-2 text-[13px] text-ink/60 hover:text-ink transition-colors"
+        >
+          See our impact
+          <svg width="11" height="11" viewBox="0 0 11 11" fill="none" className="inline-block">
+            <path d="M3 1h7v7M10 1L1 10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        </Link>
       </div>
     </section>
   );

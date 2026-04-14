@@ -18,9 +18,9 @@ const fragments: Fragment[] = [
 
 export function InlineImageStatement() {
   return (
-    <section className="bg-cream py-20 md:py-32 lg:py-40">
-      <div className="max-w-6xl mx-auto px-6">
-        <p className="text-statement text-ink text-center">
+    <section className="bg-cream min-h-screen flex items-center">
+      <div className="max-w-[1332px] mx-auto px-6 md:px-[54px] py-20">
+        <p className="text-[clamp(32px,6.6vw,85px)] font-light leading-[0.96] tracking-[-0.04em] text-ink text-center">
           {fragments.map((frag, i) => {
             if ("text" in frag) {
               return (
