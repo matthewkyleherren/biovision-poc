@@ -17,13 +17,21 @@ export function HeroHome() {
   const lines = ["Healthy soil.", "Sustainable food.", "For everyone."];
 
   return (
-    <section className="min-h-screen relative bg-black overflow-hidden">
-      {/* Full-bleed hero image */}
+    <section className="h-screen relative bg-cream overflow-hidden">
+      {/* Full-bleed hero image — desktop (landscape), anchored to bottom */}
       <Image
-        src="/images/hero/hero-main.jpg"
-        alt="Farmers working together in a green field in Sub-Saharan Africa"
+        src="/images/hero/hero_desktop.webp"
+        alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
         fill
-        className="object-cover"
+        className="object-cover object-bottom hidden md:block"
+        priority
+      />
+      {/* Full-bleed hero image — mobile (portrait crop), anchored to bottom */}
+      <Image
+        src="/images/hero/hero_mobile.webp"
+        alt="Farmer harvesting leafy greens at golden hour in Sub-Saharan Africa"
+        fill
+        className="object-cover object-bottom md:hidden"
         priority
       />
       {/* Bottom gradient for text readability */}

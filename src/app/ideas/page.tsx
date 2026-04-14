@@ -1,324 +1,424 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SectionReveal } from "@/components/ui/SectionReveal";
-import { SuperfoodFeature } from "@/components/sections/SuperfoodFeature";
-import { stories } from "@/data/stories";
+import {
+  heroImage,
+  pressHighlightHeading,
+  pressHighlightCards,
+  featuredLogos,
+  videoFeatures,
+  pullQuote,
+  articles,
+  externalArticles,
+  pressGroups,
+} from "@/data/news";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ideas — BioVision",
+  title: "Newsroom \u2014 BioVision",
   description:
-    "Stories, research, and insights from the intersection of food, ecology, and human dignity.",
+    "The latest news, press releases, and media coverage from BioVision.",
 };
 
-const topics = [
-  "All",
-  "Agriculture",
-  "Markets",
-  "Policy",
-  "Knowledge",
-  "Consumption",
-];
-
-const storyImages: Record<string, string> = {
-  "the-power-of-community": "/images/projects/malawi-group.jpg",
-  "old-grains-new-strength": "/images/stories/emmer-field.jpg",
-  "what-enterprises-need": "/images/stories/climate-hub.jpg",
-  "energy-crises-food-system": "/images/stories/kenya-agriculture.jpg",
-  "five-tips-sustainable-consumption": "/images/general/food-system.jpg",
-  "agroecology-in-practice-switzerland": "/images/general/swiss-cows.jpg",
-  "women-feed-the-world": "/images/general/ethiopia-couple.jpg",
-};
-
-function formatDate(dateStr: string) {
-  const date = new Date(dateStr);
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+/* ── Tiny external-link icon ── */
+function ExtIcon({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      width="11"
+      height="11"
+      viewBox="0 0 11 11"
+      fill="none"
+      className={`inline-block ml-1 ${className}`}
+    >
+      <path
+        d="M3 1h7v7M10 1L1 10"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
-export default function IdeasPage() {
-  const featuredStory = stories.find((s) => s.featured)!;
-  const twoColumn = stories.filter(
-    (s) =>
-      s.slug === "old-grains-new-strength" ||
-      s.slug === "what-enterprises-need"
-  );
-  const threeColumn = stories.filter(
-    (s) =>
-      s.slug === "energy-crises-food-system" ||
-      s.slug === "five-tips-sustainable-consumption" ||
-      s.slug === "agroecology-in-practice-switzerland"
-  );
-  const fullWidthStory = stories.find(
-    (s) => s.slug === "women-feed-the-world"
-  )!;
+/* ── Article card (medium: image left | alternative: image right) ── */
+function ArticleCard({
+  title,
+  category,
+  date,
+  image,
+  layout,
+  href,
+  externalSource,
+}: {
+  title: string;
+  category: string;
+  date: string;
+  image: string;
+  layout: "medium" | "alternative";
+  href: string;
+  externalSource?: string;
+}) {
+  const isAlt = layout === "alternative";
+  const isExternal = !!externalSource;
 
   return (
-    <>
-      {/* ── Header Section ── */}
-      <section className="bg-cream pt-32 pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          {/* Breadcrumb */}
-          <nav className="text-caption text-ink-muted mb-8">
-            <Link href="/" className="hover:text-ink transition-colors">
-              Home
-            </Link>
-            <span className="mx-2">/</span>
-            <span className="text-ink">Ideas</span>
-          </nav>
+    <div
+      className="grid grid-cols-1 lg:grid-cols-12 gap-[22px] pb-[60px] max-w-[1332px] mx-auto px-6 lg:px-0"
+    >
+      {/* Image */}
+      <Link
+        href={href}
+        className={
+          isAlt
+            ? "lg:col-start-6 lg:col-end-12 lg:row-start-1"
+            : "lg:col-start-2 lg:col-end-9"
+        }
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        <div className="relative aspect-[16/9] rounded-md overflow-hidden">
+          <Image
+            src={image}
+            alt={title}
+            fill
+            className="object-cover"
+          />
+        </div>
+      </Link>
 
-          {/* Title */}
-          <h1 className="text-hero text-ink">Ideas</h1>
+      {/* Details */}
+      <div
+        className={`flex flex-col justify-center ${
+          isAlt
+            ? "lg:col-start-2 lg:col-end-6 lg:row-start-1"
+            : "lg:col-start-9 lg:col-end-12"
+        }`}
+      >
+        <div className="text-[18px] leading-[24px] text-black/60">
+          {externalSource ? (
+            <span>
+              {externalSource} <ExtIcon />
+            </span>
+          ) : (
+            category
+          )}
+        </div>
+        <h2
+          className={`mt-2 font-normal ${
+            isAlt
+              ? "text-[28px] lg:text-[42px] leading-[1.12] tracking-[-0.033em]"
+              : "text-[28px] lg:text-[36px] leading-[1.12] tracking-[-0.033em]"
+          }`}
+        >
+          <Link
+            href={href}
+            className="hover:opacity-70 transition-opacity"
+            target={isExternal ? "_blank" : undefined}
+            rel={isExternal ? "noopener noreferrer" : undefined}
+          >
+            {title}
+          </Link>
+        </h2>
+        <div className="mt-4 text-[12px] leading-[18px] tracking-[0.06em] uppercase text-black/60">
+          {date}
+        </div>
+      </div>
+    </div>
+  );
+}
 
-          {/* Subtitle */}
-          <p className="text-body-lg text-ink-light mt-5 max-w-2xl">
-            Stories, research, and insights from the intersection of food,
-            ecology, and human dignity.
-          </p>
+/* ── Press group (3 external links in a row) ── */
+function PressGroup({
+  items,
+}: {
+  items: { source: string; headline: string; date: string }[];
+}) {
+  return (
+    <div className="flex flex-col md:flex-row gap-6 max-w-[1332px] mx-auto px-6 lg:px-[110px] pb-[60px]">
+      {items.map((item, i) => (
+        <div key={i} className="flex-1">
+          <div className="text-[15px] leading-[18px] text-black/60">
+            {item.source} <ExtIcon />
+          </div>
+          <h2 className="mt-2 text-[21.6px] leading-[28px] font-normal">
+            {item.headline}
+          </h2>
+          <div className="mt-3 text-[12px] leading-[18px] tracking-[0.06em] uppercase text-black/60">
+            {item.date}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-          {/* Topic Filter Pills */}
-          <div className="flex flex-wrap gap-3 mt-10">
-            {topics.map((topic) => (
-              <button
-                key={topic}
-                className={
-                  topic === "All"
-                    ? "bg-ink text-white px-5 py-2.5 rounded-full text-body-sm transition-colors"
-                    : "bg-transparent border border-ink/15 text-ink-light px-5 py-2.5 rounded-full text-body-sm hover:border-ink/40 hover:text-ink transition-colors"
-                }
+/* ── Horizontal rule ── */
+function Divider() {
+  return (
+    <hr className="border-t border-black/10 max-w-[1440px] mx-auto" />
+  );
+}
+
+export default function NewsroomPage() {
+  return (
+    <main className="bg-cream">
+      {/* ── Newsroom Title ── */}
+      <section className="pt-32 md:pt-40 pb-8">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-[54px]">
+          <h1 className="text-[clamp(56px,8.3vw,120px)] font-light leading-[1] tracking-[-0.033em]">
+            Newsroom
+          </h1>
+        </div>
+      </section>
+
+      {/* ── Hero Image ── */}
+      <section className="pb-12">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-[54px]">
+          <div className="relative aspect-[16/9] rounded-md overflow-hidden">
+            <Image
+              src={heroImage}
+              alt="Construction workers on site"
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ── Press Highlights ── */}
+      <section className="pb-12">
+        <div className="max-w-[1440px] mx-auto px-6 md:px-[54px]">
+          {/* Label */}
+          <div className="text-[15px] leading-[18px] text-black/60 mb-6">
+            Press highlights
+          </div>
+
+          {/* Heading */}
+          <h2 className="text-[clamp(28px,3.6vw,48px)] font-normal leading-[1.15] tracking-[-0.02em] max-w-[850px]">
+            {pressHighlightHeading}
+          </h2>
+
+          {/* Scrollable cards */}
+          <div className="flex gap-4 overflow-x-auto mt-10 pb-4 -mr-6 md:-mr-[54px] pr-6 md:pr-[54px] scrollbar-hide">
+            {pressHighlightCards.map((card, i) => (
+              <div
+                key={i}
+                className="flex-shrink-0 w-[260px] md:w-[300px] bg-[#E8E5DE] rounded-lg p-6 flex flex-col justify-between min-h-[200px]"
               >
-                {topic}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Story ── */}
-      <section className="bg-cream pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <SectionReveal>
-            <Link
-              href={`/ideas/${featuredStory.slug}`}
-              className="group block relative rounded-2xl overflow-hidden mt-8"
-            >
-              {/* Image */}
-              <div className="relative aspect-[3/2] md:aspect-[16/9] overflow-hidden">
-                <Image
-                  src={storyImages[featuredStory.slug]}
-                  alt={featuredStory.title}
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  priority
-                />
-                {/* Dark gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              </div>
-
-              {/* Text overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 lg:p-14">
-                <span className="text-saffron text-body-sm">
-                  {featuredStory.topic}
-                </span>
-                <h2 className="text-display text-white mt-3">
-                  {featuredStory.title}
-                </h2>
-                <p className="text-body-lg text-white/70 mt-3 max-w-2xl">
-                  {featuredStory.excerpt}
+                <p className="text-[22px] md:text-[28.8px] leading-[1.2] tracking-[-0.014em] font-normal">
+                  {card.headline}
                 </p>
-                <span className="text-caption text-white/50 mt-4 block">
-                  {formatDate(featuredStory.date)}
-                </span>
+                <p className="text-[15px] leading-[18px] text-black/60 mt-6">
+                  {card.source} <ExtIcon />
+                </p>
               </div>
-            </Link>
-          </SectionReveal>
+            ))}
+          </div>
+
+          {/* CTA button */}
+          <div className="flex justify-center mt-12 mb-8">
+            <button className="bg-black text-white px-8 py-4 rounded-full text-[15px] leading-[18px] hover:bg-black/80 transition-colors">
+              Learn about our fire recovery efforts
+            </button>
+          </div>
         </div>
       </section>
 
-      {/* ── Two-Column Story Row ── */}
-      <section className="bg-cream pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-            {twoColumn.map((story, i) => (
-              <SectionReveal key={story.slug} delay={i * 0.1}>
-                <Link
-                  href={`/ideas/${story.slug}`}
-                  className="group block bg-cream-dark rounded-2xl overflow-hidden"
-                >
-                  <div className="relative aspect-[3/2] overflow-hidden">
-                    <Image
-                      src={storyImages[story.slug]}
-                      alt={story.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6 md:p-8">
-                    <span className="text-saffron text-body-sm">
-                      {story.topic}
-                    </span>
-                    <h3 className="text-heading mt-3 text-ink">
-                      {story.title}
-                    </h3>
-                    <p className="text-body text-ink-light mt-2 line-clamp-2">
-                      {story.excerpt}
-                    </p>
-                    <span className="text-caption text-ink-muted mt-4 block">
-                      {formatDate(story.date)}
-                    </span>
-                  </div>
-                </Link>
-              </SectionReveal>
+      {/* ── "We've been featured in:" ── */}
+      <section className="max-w-[1440px] mx-auto">
+        <Divider />
+        <div className="py-10 md:py-16 text-center px-6">
+          <p className="text-[18px] leading-[1] text-black/60 mb-10">
+            We&apos;ve been featured in:
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16">
+            {featuredLogos.map((logo) => (
+              <span
+                key={logo}
+                className="text-[20px] md:text-[28px] font-bold text-black/70 tracking-tight"
+                style={{
+                  fontFamily:
+                    logo === "Bloomberg" || logo === "WSJ"
+                      ? "Georgia, serif"
+                      : "inherit",
+                }}
+              >
+                {logo}
+              </span>
             ))}
           </div>
+        </div>
+        <Divider />
+      </section>
+
+      {/* ── Spacer ── */}
+      <div className="h-[50px]" />
+
+      {/* ── Article 1: TIME Best Invention (medium) ── */}
+      <ArticleCard
+        title={articles[0].title}
+        category={articles[0].category}
+        date={articles[0].date}
+        image={articles[0].image}
+        layout={articles[0].layout}
+        href={`/ideas/${articles[0].slug}`}
+      />
+
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── Video Features ── */}
+      <section className="max-w-[1440px] mx-auto px-6 md:px-[54px] pb-12">
+        <h2 className="text-[28.8px] leading-[1.2] font-normal mb-8">
+          Recent video features
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {videoFeatures.map((video, i) => (
+            <div key={i}>
+              <div className="relative aspect-[16/9] rounded-md overflow-hidden mb-4">
+                <Image
+                  src={video.image}
+                  alt={video.description}
+                  fill
+                  className="object-cover"
+                />
+                {/* Play button overlay */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="w-14 h-14 bg-white/90 rounded-full flex items-center justify-center">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M4 2L16 9L4 16V2Z" fill="black" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+              <p className="text-[15px] leading-[18px] text-black/60">
+                {video.source} <ExtIcon />
+              </p>
+              <h3 className="mt-2 text-[23px] leading-[28.8px] font-normal">
+                {video.description}
+              </h3>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* ── Pull Quote ── */}
-      <section className="bg-cream py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-6">
-          <SectionReveal>
-            <blockquote className="max-w-4xl mx-auto text-center">
-              <p className="text-statement text-ink">
-                &ldquo;The future of food is not about producing more &mdash;
-                it&apos;s about producing better, with respect for people and
-                planet.&rdquo;
-              </p>
-              <footer className="mt-8">
-                <span className="text-body-sm text-ink-muted">
-                  Hans Rudolf Herren, World Food Prize Laureate &amp; BioVision
-                  Founder
-                </span>
-              </footer>
-            </blockquote>
-          </SectionReveal>
-        </div>
-      </section>
-
-      {/* ── Three-Column Story Row ── */}
-      <section className="bg-cream pb-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {threeColumn.map((story, i) => (
-              <SectionReveal key={story.slug} delay={i * 0.1}>
-                <Link
-                  href={`/ideas/${story.slug}`}
-                  className="group block bg-cream-dark rounded-2xl overflow-hidden"
-                >
-                  <div className="relative aspect-[3/2] overflow-hidden">
-                    <Image
-                      src={storyImages[story.slug]}
-                      alt={story.title}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6">
-                    <span className="text-saffron text-body-sm">
-                      {story.topic}
-                    </span>
-                    <h3 className="text-heading mt-3 text-ink">
-                      {story.title}
-                    </h3>
-                    <p className="text-body text-ink-light mt-2 line-clamp-2">
-                      {story.excerpt}
-                    </p>
-                  </div>
-                </Link>
-              </SectionReveal>
-            ))}
+      <section className="max-w-[1440px] mx-auto">
+        <Divider />
+        <div className="py-16 md:py-24 px-6 md:px-[54px]">
+          <div className="max-w-[900px] ml-auto text-right">
+            <h2 className="text-[clamp(32px,4.16vw,60px)] leading-[1.1] tracking-[-0.04em] font-normal">
+              {pullQuote.text}
+            </h2>
+            <p className="mt-6 text-[15px] leading-[18px] text-black/60">
+              &mdash; {pullQuote.attribution} <ExtIcon />
+            </p>
           </div>
         </div>
+        <Divider />
       </section>
 
-      {/* ── Superfood Feature ── */}
-      <SuperfoodFeature />
+      <div className="h-[50px]" />
 
-      {/* ── Full-Width Story Card (Horizontal) ── */}
-      <section className="bg-cream py-8">
-        <div className="max-w-7xl mx-auto px-6">
-          <SectionReveal>
-            <Link
-              href={`/ideas/${fullWidthStory.slug}`}
-              className="group block bg-cream-dark rounded-2xl overflow-hidden"
-            >
-              <div className="grid grid-cols-1 md:grid-cols-2">
-                {/* Image half */}
-                <div className="relative aspect-[3/2] md:aspect-auto md:min-h-[400px] overflow-hidden">
-                  <Image
-                    src={storyImages[fullWidthStory.slug]}
-                    alt={fullWidthStory.title}
-                    fill
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                </div>
-                {/* Content half */}
-                <div className="flex flex-col justify-center p-8 md:p-12 lg:p-16">
-                  <span className="text-saffron text-body-sm">
-                    {fullWidthStory.topic}
-                  </span>
-                  <h3 className="text-display mt-4 text-ink">
-                    {fullWidthStory.title}
-                  </h3>
-                  <p className="text-body-lg text-ink-light mt-4 max-w-lg">
-                    {fullWidthStory.excerpt}
-                  </p>
-                  <span className="text-caption text-ink-muted mt-6 block">
-                    {formatDate(fullWidthStory.date)}
-                  </span>
-                  <span className="mt-8 inline-flex items-center text-saffron text-body group-hover:underline">
-                    Read story
-                    <svg
-                      className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
-                  </span>
-                </div>
-              </div>
-            </Link>
-          </SectionReveal>
-        </div>
-      </section>
+      {/* ── Article 2: Backyard XL 10 (alternative) ── */}
+      <ArticleCard
+        title={articles[1].title}
+        category={articles[1].category}
+        date={articles[1].date}
+        image={articles[1].image}
+        layout={articles[1].layout}
+        href={`/ideas/${articles[1].slug}`}
+      />
 
-      {/* ── Newsletter CTA ── */}
-      <section className="bg-cream py-16">
-        <div className="max-w-7xl mx-auto px-6">
-          <SectionReveal>
-            <div className="bg-cream-dark rounded-2xl max-w-3xl mx-auto p-8 md:p-12 text-center">
-              <h2 className="text-heading text-ink">Stay in the loop</h2>
-              <p className="text-body text-ink-light mt-3 max-w-md mx-auto">
-                Get the latest stories, research, and ideas from BioVision
-                delivered to your inbox. No spam, just substance.
-              </p>
-              <div className="mt-8 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="Your email address"
-                  className="flex-1 bg-white border border-ink/10 rounded-full px-5 py-3 text-body text-ink placeholder:text-ink-muted focus:outline-none focus:border-saffron transition-colors"
-                />
-                <button className="bg-saffron text-white px-8 py-3 rounded-full hover:bg-saffron-light transition-colors whitespace-nowrap">
-                  Subscribe
-                </button>
-              </div>
-              <p className="text-caption text-ink-muted mt-4">
-                Monthly digest. Unsubscribe anytime.
-              </p>
-            </div>
-          </SectionReveal>
-        </div>
-      </section>
-    </>
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── Article 3: Financing (medium) ── */}
+      <ArticleCard
+        title={articles[2].title}
+        category={articles[2].category}
+        date={articles[2].date}
+        image={articles[2].image}
+        layout={articles[2].layout}
+        href={`/ideas/${articles[2].slug}`}
+      />
+
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── Article 4: Backyard XL 8 (alternative) ── */}
+      <ArticleCard
+        title={articles[3].title}
+        category={articles[3].category}
+        date={articles[3].date}
+        image={articles[3].image}
+        layout={articles[3].layout}
+        href={`/ideas/${articles[3].slug}`}
+      />
+
+      {/* ── Press Group 1 ── */}
+      <PressGroup items={pressGroups[0]} />
+
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── Article 5: Factory (medium) ── */}
+      <ArticleCard
+        title={articles[4].title}
+        category={articles[4].category}
+        date={articles[4].date}
+        image={articles[4].image}
+        layout={articles[4].layout}
+        href={`/ideas/${articles[4].slug}`}
+      />
+
+      {/* ── Article 6: $41M raise (alternative) ── */}
+      <ArticleCard
+        title={articles[5].title}
+        category={articles[5].category}
+        date={articles[5].date}
+        image={articles[5].image}
+        layout={articles[5].layout}
+        href={`/ideas/${articles[5].slug}`}
+      />
+
+      <Divider />
+
+      {/* ── Press Group 2 ── */}
+      <div className="h-[50px]" />
+      <PressGroup items={pressGroups[1]} />
+
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── External Article: WSJ (medium) ── */}
+      <ArticleCard
+        title={externalArticles[0].title}
+        category=""
+        date={externalArticles[0].date}
+        image={externalArticles[0].image}
+        layout={externalArticles[0].layout}
+        href="#"
+        externalSource={externalArticles[0].externalSource}
+      />
+
+      <Divider />
+      <div className="h-[50px]" />
+
+      {/* ── External Article: Fast Company (alternative) ── */}
+      <ArticleCard
+        title={externalArticles[1].title}
+        category=""
+        date={externalArticles[1].date}
+        image={externalArticles[1].image}
+        layout={externalArticles[1].layout}
+        href="#"
+        externalSource={externalArticles[1].externalSource}
+      />
+
+      {/* Bottom spacing */}
+      <div className="h-16" />
+    </main>
   );
 }
